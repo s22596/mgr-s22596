@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title th:text="${title}">Strona</title>
+</head>
+<body onload="searchFiles(' ', 'NetworkDisk')">
+<div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/NetworkDisk}">Dysk</a></li>
+            <li><a th:href="@{/Mongo}">Mongo</a></li>
+            <li><a th:href="@{/page3}">Strona 3</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1 th:text="${title}">Strona</h1>
+
+        <form action="/updatePath" method="post">
+            <label>
+                <select name="pathUrl">
+                    <option value="public" th:selected="${selectedPath == 'public'}">Dysk P</option>
+                    <option value="Users\\s22596" th:selected="${selectedPath == 'Users\\s22596'}">Dysk Z</option>
+                </select>
+            </label>
+            <input type="submit" value="Choose Path">
+        </form>
+        <form action="/searchNetworkDisk" method="get">
+            <label>
+                <input type="text" name="query" placeholder="Wyszukaj pliki i foldery"
+                       onkeyup="searchFiles(this.value, 'NetworkDisk')" ,
+                       onkeydown="if(event.keyCode === 13) {return false}">
+            </label>
+        </form>
+        <h2 th:if="${!@networkDiskController.getCutPath().isEmpty()}">
+            <span th:text="${@networkDiskController.getCutPath()}"></span>
+        </h2>
+        <h2>Wyniki wyszukiwania:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Akcja</th>
+            </tr>
+            <tr th:if="${!@networkDiskController.ifBasePath()}">
+                <td><a th:href="@{/goUp}">..</a></td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody id="results">
+
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+<script type="text/javascript" src="/js/search-file.js?version=1">
+    window.onload = function () {
+        searchFiles(' ', 'NetworkDisk');
+    }
+</script>
+
+</html>

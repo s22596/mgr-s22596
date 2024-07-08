@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title th:text="${title}">Strona</title>
+</head>
+<body onload="searchFiles(' ', 'Mongo')">
+
+<div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/NetworkDisk}">Dysk</a></li>
+            <li><a th:href="@{/Mongo}">Mongo</a></li>
+            <li><a th:href="@{/page3}">Strona 3</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1 th:text="${title}">Strona</h1>
+        <form action="/searchMongo" method="get">
+            <label>
+                <input type="text" name="query" placeholder="Wyszukaj pliki i foldery"
+                       onkeyup="searchFiles(this.value, 'Mongo')" ,
+                       onkeydown="if(event.keyCode === 13) {return false}">
+            </label>
+        </form>
+        <h2 th:if="${!@mongoController.getCurrentPath().isEmpty()}">
+            <span th:text="${@mongoController.getCurrentPath()}"></span>
+        </h2>
+        <h2>Wyniki wyszukiwania:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Akcja</th>
+            </tr>
+            <tr th:if="${!@mongoController.ifBasePath()}">
+                <td><a th:href="@{/goUpMongo}">..</a></td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody id="results">
+
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+<script type="text/javascript" src="/js/search-file.js?version=2">
+    window.onload = function () {
+        searchFiles(' ', 'Mongo');
+    }
+</script>
+</html>

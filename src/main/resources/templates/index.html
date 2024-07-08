@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title th:text="${title}">Strona Główna</title>
+</head>
+<body>
+<div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/NetworkDisk/}">Dysk</a></li>
+            <li><a th:href="@{/Mongo}">Mongo</a></li>
+            <li><a th:href="@{/page3}">Strona 3</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1 th:text="${content}">Witamy na stronie głównej!</h1>
+    </main>
+</div>
+</body>
+</html>
