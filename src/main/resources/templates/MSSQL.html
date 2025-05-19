@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MongoDB – GridFS</title>
+    <title>Lista plików</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
@@ -16,10 +16,11 @@
             <li><a th:href="@{/NetworkDisk}">NetworkDisk</a></li>
         </ul>
     </aside>
-    <main class="content">
-        <h1>Lista plików - MongoDB z GridFS</h1>
 
-        <form method="post" action="/Mongo/upload" enctype="multipart/form-data">
+    <main class="content">
+        <h1>Lista plików – MS SQL z FileTable</h1>
+
+        <form method="post" action="/MSSQL/upload" enctype="multipart/form-data">
             <input type="file" name="file" required/>
             <button type="submit">Dodaj plik</button>
         </form>
@@ -31,7 +32,7 @@
             <p>Czas usuwania pliku: <span th:text="${deleteDuration}">0</span> ms</p>
         </div>
 
-        <form method="post" th:action="@{/Mongo/download}">
+        <form method="post" th:action="@{/MSSQL/download}">
             <button type="submit">Pokaż czas pobierania</button>
         </form>
 
@@ -40,33 +41,29 @@
                 <p>Nie pobrano żadnego pliku.</p>
             </div>
             <div th:if="${downloadDuration > 0}">
-                <p>Pobieranie pliku zajęło <span th:text="${downloadDuration}">0</span> ms.</p>
+                <p>Pobieranie pliku zajęło <span th:text="${downloadDuration}"></span> ms.</p>
             </div>
         </div>
 
         <table border="1">
-            <thead>
             <tr>
                 <th>Nazwa pliku</th>
                 <th>Pobierz</th>
                 <th>Usuń</th>
             </tr>
-            </thead>
-            <tbody>
             <tr th:each="file : ${files}">
                 <td th:text="${file.name}">Nazwa</td>
                 <td>
-                    <a th:href="@{/Mongo/download/{objectId}(objectId=${file.id})}">
+                    <a th:href="@{/MSSQL/download/{streamId}(streamId=${file.id})}">
                         <button>Pobierz</button>
                     </a>
                 </td>
                 <td>
-                    <form method="post" th:action="@{/Mongo/delete/{objectId}(objectId=${file.id})}">
+                    <form method="post" th:action="@{/MSSQL/delete/{streamId}(streamId=${file.id})}">
                         <button type="submit">Usuń</button>
                     </form>
                 </td>
             </tr>
-            </tbody>
         </table>
     </main>
 </div>

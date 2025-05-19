@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MongoDB – GridFS</title>
+    <title>Lista plików AWS S3</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
@@ -17,9 +17,8 @@
         </ul>
     </aside>
     <main class="content">
-        <h1>Lista plików - MongoDB z GridFS</h1>
-
-        <form method="post" action="/Mongo/upload" enctype="multipart/form-data">
+        <h1>Lista plików - AWS z S3</h1>
+        <form method="post" action="/AWS/upload" enctype="multipart/form-data">
             <input type="file" name="file" required/>
             <button type="submit">Dodaj plik</button>
         </form>
@@ -30,8 +29,7 @@
         <div th:if="${deleteDuration}">
             <p>Czas usuwania pliku: <span th:text="${deleteDuration}">0</span> ms</p>
         </div>
-
-        <form method="post" th:action="@{/Mongo/download}">
+        <form method="post" th:action="@{/AWS/download}">
             <button type="submit">Pokaż czas pobierania</button>
         </form>
 
@@ -43,7 +41,6 @@
                 <p>Pobieranie pliku zajęło <span th:text="${downloadDuration}">0</span> ms.</p>
             </div>
         </div>
-
         <table border="1">
             <thead>
             <tr>
@@ -56,12 +53,12 @@
             <tr th:each="file : ${files}">
                 <td th:text="${file.name}">Nazwa</td>
                 <td>
-                    <a th:href="@{/Mongo/download/{objectId}(objectId=${file.id})}">
+                    <a th:href="@{/AWS/download/{key}(key=${file.id})}">
                         <button>Pobierz</button>
                     </a>
                 </td>
                 <td>
-                    <form method="post" th:action="@{/Mongo/delete/{objectId}(objectId=${file.id})}">
+                    <form method="post" th:action="@{/AWS/delete/{key}(key=${file.id})}">
                         <button type="submit">Usuń</button>
                     </form>
                 </td>

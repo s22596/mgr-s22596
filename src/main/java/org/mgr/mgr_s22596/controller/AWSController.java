@@ -2,7 +2,7 @@ package org.mgr.mgr_s22596.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.mgr.mgr_s22596.model.FileStructure;
-import org.mgr.mgr_s22596.service.MongoService;
+import org.mgr.mgr_s22596.service.AWSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,63 +14,62 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class MongoController extends DatabaseController{
+public class AWSController extends DatabaseController {
 
-    private final MongoService mongoService;
+    private final AWSService awsService;
 
     @Autowired
-    public MongoController(MongoService mongoService) {
-        this.mongoService = mongoService;
+    public AWSController(AWSService awsService) {
+        this.awsService = awsService;
     }
 
     @Override
     protected List<FileStructure> getFiles() {
-        return mongoService.getFiles();
+        return awsService.getFiles();
     }
 
     @Override
     protected List<FileStructure> getTestFiles() {
-        return mongoService.getTestFiles();
+        return awsService.getTestFiles();
     }
 
-    @GetMapping(value = {"/Mongo"})
+    @GetMapping("/AWS")
     public String listFiles(Model model) {
-        return super.showFiles(model, "/Mongo");
+        return super.showFiles(model, "/AWS");
     }
 
     @Override
     protected long downloadFile(HttpServletResponse response, String fileName) throws IOException {
-        return mongoService.downloadFile(fileName, response);
+        return awsService.downloadFile(fileName, response);
     }
 
-    @GetMapping("/Mongo/download/{objectId}")
-    public void downloadFile(@PathVariable String objectId, HttpServletResponse response) throws IOException {
-        super.updateDownloadDuration(objectId, response);
+    @GetMapping("/AWS/download/{fileName}")
+    public void downloadFile(@PathVariable String fileName, HttpServletResponse response) throws IOException {
+        super.updateDownloadDuration(fileName, response);
     }
 
-    @PostMapping("/Mongo/download")
+    @PostMapping("/AWS/download")
     public String downloadFile(RedirectAttributes redirectAttributes) throws IOException {
-        return super.postDownloadDuration(redirectAttributes, "/Mongo");
+        return super.postDownloadDuration(redirectAttributes, "/AWS");
     }
 
     @Override
     protected long saveFile(MultipartFile file) throws IOException {
-        return mongoService.saveFile(file);
+        return awsService.saveFile(file);
     }
 
-    @PostMapping("/Mongo/upload")
+    @PostMapping("/AWS/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
-        return super.handleUpload(file, redirectAttributes, "/Mongo");
+        return super.handleUpload(file, redirectAttributes, "/AWS");
     }
 
     @Override
     protected long deleteFile(String fileName) throws IOException {
-        return mongoService.deleteFile(fileName);
+        return awsService.deleteFile(fileName);
     }
 
-    @PostMapping("/Mongo/delete/{objectId}")
-    public String deleteFile(@PathVariable String objectId, RedirectAttributes redirectAttributes) throws IOException {
-        return super.handleDelete(objectId, redirectAttributes, "/Mongo");
+    @PostMapping("/AWS/delete/{fileName}")
+    public String deleteFile(@PathVariable String fileName, RedirectAttributes redirectAttributes) throws IOException {
+        return super.handleDelete(fileName, redirectAttributes, "/AWS");
     }
-
 }

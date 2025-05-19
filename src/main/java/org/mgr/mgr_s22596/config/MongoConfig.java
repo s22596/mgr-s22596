@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -68,24 +67,20 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
             MongoDatabase database = mongoClient.getDatabase(AppConfig.MONGO_DB_NAME);
             GridFSBucket gridFSBucket = GridFSBuckets.create(database);
 
-            uploadDirectoryToGridFS(gridFSBucket, AppConfig.PJATK_BASIC_PATH + AppConfig.PJATK_USER_DISK_NAME, "");
+            uploadDirectoryToGridFS(gridFSBucket, "src/main/java/org/mgr/mgr_s22596/scripts/file");
         }
     }
 
-    private static void uploadDirectoryToGridFS(GridFSBucket gridFSBucket, String folderPath, String parentPath) throws FileNotFoundException {
+    private static void uploadDirectoryToGridFS(GridFSBucket gridFSBucket, String folderPath) throws FileNotFoundException {
         File folder = new File(folderPath);
         for (File file : folder.listFiles(file -> !file.isHidden())) {
-            String relativePath = parentPath.isEmpty() ? file.getName() : parentPath + "/" + file.getName();
-            if (file.isDirectory()) {
-                org.bson.Document folderMetadata = new org.bson.Document("path", relativePath).append("type", "folder");
-                gridFSBucket.uploadFromStream(relativePath, new ByteArrayInputStream(new byte[0]), new GridFSUploadOptions().metadata(folderMetadata));
-                uploadDirectoryToGridFS(gridFSBucket, file.getAbsolutePath(), relativePath);
-            } else {
-                FileInputStream streamToUploadFrom = new FileInputStream(file);
-                org.bson.Document fileMetadata = new org.bson.Document("path", relativePath).append("type", "file");
-                GridFSUploadOptions options = new GridFSUploadOptions().metadata(fileMetadata);
-                gridFSBucket.uploadFromStream(relativePath, streamToUploadFrom, options);
-            }
+            String relativePath = file.getName();
+            if(!relativePath.endsWith(".txt")) continue;
+            FileInputStream streamToUploadFrom = new FileInputStream(file);
+            org.bson.Document fileMetadata = new org.bson.Document("path", relativePath).append("type", "file");
+            GridFSUploadOptions options = new GridFSUploadOptions().metadata(fileMetadata);
+            gridFSBucket.uploadFromStream(relativePath, streamToUploadFrom, options);
         }
     }
+
 }

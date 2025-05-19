@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class NetworkDriveService extends GeneralService {
+public class NetworkDriveService {
 
     public List<String> getFiles(String path) {
         File directoryPath = new File(path);
@@ -51,7 +51,16 @@ public class NetworkDriveService extends GeneralService {
 
     public List<String> searchFiles(String path, String query) {
         List<String> allFiles = getFiles(path);
-        return searchFiles(allFiles, query);
+        if (query == null || query.isEmpty()) {
+            return allFiles;
+        }
+        List<String> filteredFiles = new ArrayList<>();
+        for (String file : allFiles) {
+            if (file.toLowerCase().contains(query.toLowerCase())) {
+                filteredFiles.add(file);
+            }
+        }
+        return filteredFiles;
     }
 
 

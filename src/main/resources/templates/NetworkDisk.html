@@ -1,39 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
 <head>
-    <title th:text="${title}">Strona</title>
+    <meta charset="UTF-8">
+    <title>Dysk sieciowy</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body onload="searchFiles(' ', 'NetworkDisk')">
-<div>
-    <nav>
+<div class="layout">
+    <aside class="sidebar">
         <ul>
-            <li><a th:href="@{/NetworkDisk}">Dysk</a></li>
-            <li><a th:href="@{/Mongo}">Mongo</a></li>
-            <li><a th:href="@{/page3}">Strona 3</a></li>
+            <li><a th:href="@{/}">Strona Główna</a></li>
+            <li><a th:href="@{/MSSQL}">MS SQL</a></li>
+            <li><a th:href="@{/Mongo}">MongoDB</a></li>
+            <li><a th:href="@{/AWS}">AWS S3</a></li>
+            <li><a th:href="@{/NetworkDisk}">NetworkDisk</a></li>
         </ul>
-    </nav>
-    <main>
-        <h1 th:text="${title}">Strona</h1>
-
-        <form action="/updatePath" method="post">
+    </aside>
+    <main class="content">
+        <h1>Dysk sieciowy</h1>
+        <form action="/updatePath" method="post" style="margin-bottom: 20px;">
             <label>
                 <select name="pathUrl">
                     <option value="public" th:selected="${selectedPath == 'public'}">Dysk P</option>
                     <option value="Users\\s22596" th:selected="${selectedPath == 'Users\\s22596'}">Dysk Z</option>
                 </select>
             </label>
-            <input type="submit" value="Choose Path">
+            <button type="submit">Wybierz dysk</button>
         </form>
-        <form action="/searchNetworkDisk" method="get">
+        <form action="/searchNetworkDisk" method="get" style="margin-bottom: 30px;">
             <label>
                 <input type="text" name="query" placeholder="Wyszukaj pliki i foldery"
-                       onkeyup="searchFiles(this.value, 'NetworkDisk')" ,
-                       onkeydown="if(event.keyCode === 13) {return false}">
+                       onkeyup="searchFiles(this.value, 'NetworkDisk')"
+                       onkeydown="if(event.keyCode === 13) return false">
             </label>
         </form>
         <h2 th:if="${!@networkDiskController.getCutPath().isEmpty()}">
-            <span th:text="${@networkDiskController.getCutPath()}"></span>
+            Lokalizacja: <span th:text="${@networkDiskController.getCutPath()}"></span>
         </h2>
+
         <h2>Wyniki wyszukiwania:</h2>
         <table>
             <thead>
@@ -50,13 +54,14 @@
 
             </tbody>
         </table>
+        </table>
     </main>
 </div>
-</body>
+
 <script type="text/javascript" src="/js/search-file.js?version=1">
     window.onload = function () {
         searchFiles(' ', 'NetworkDisk');
     }
 </script>
-
+</body>
 </html>

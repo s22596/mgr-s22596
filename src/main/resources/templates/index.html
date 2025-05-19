@@ -1,20 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${title}">Strona Główna</title>
+    <meta charset="UTF-8">
+    <title>Strona Główna</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<div>
-    <nav>
+<div class="layout">
+    <aside class="sidebar">
         <ul>
-            <li><a th:href="@{/NetworkDisk/}">Dysk</a></li>
-            <li><a th:href="@{/Mongo}">Mongo</a></li>
-            <li><a th:href="@{/page3}">Strona 3</a></li>
+            <li><a th:href="@{/}">Strona Główna</a></li>
+            <li><a th:href="@{/MSSQL}">MS SQL</a></li>
+            <li><a th:href="@{/Mongo}">MongoDB</a></li>
+            <li><a th:href="@{/AWS}">AWS S3</a></li>
+            <li><a th:href="@{/NetworkDisk}">NetworkDisk</a></li>
         </ul>
-    </nav>
-    <main>
-        <h1 th:text="${content}">Witamy na stronie głównej!</h1>
+    </aside>
+
+    <main class="content">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+            <h2 style="font-size: 20px; font-weight: 500; letter-spacing: 1px; margin-bottom: 8px;">
+                Polsko-Japońska Akademia Technik Komputerowych
+            </h2>
+            <h3 style="font-size: 16px; font-weight: 400; margin-bottom: 30px;">
+                Wydział Informatyki
+            </h3>
+
+            <h1 style="font-size: 26px; font-weight: 600; margin-bottom: 30px; line-height: 1.5;">
+                Sposoby przechowywania plików<br>i ich zarządzanie w Aplikacjach Webowych
+            </h1>
+
+            <img src="/pjatk-logo.png" alt="Logo PJATK" style="max-width: 250px; margin: 30px auto; display: block;"/>
+
+            <p style="margin-top: 30px; font-size: 16px;">Jan Siemieniec s22596</p>
+        </div>
     </main>
+
 </div>
 </body>
 </html>
